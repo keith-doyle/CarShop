@@ -386,6 +386,57 @@ void viewCarsByOwners(struct Car* head) {
     if (!found)
         printf("No cars found with %d previous owners.\n", ownersFilter);
 }
+void customizeCarColor(struct Car* head) {
+    char reg[10];
+    printf("Enter the registration number of the car you want to customize: ");
+    scanf("%s", reg);
+
+    struct Car* current = head;
+    while (current != NULL) {
+        if (strcmp(current->registration, reg) == 0) {
+            printf("Car found!\n");
+            printf("Select a new color for the car:\n");
+            printf("1. Blue\n");
+            printf("2. Red\n");
+            printf("3. Black\n");
+            printf("4. Silver\n");
+            printf("5. White\n");
+            printf("6. Green\n");
+            printf("Enter your choice: ");
+
+            int choice;
+            scanf("%d", &choice);
+
+            switch (choice) {
+            case 1:
+                strcpy(current->color, "Blue");
+                break;
+            case 2:
+                strcpy(current->color, "Red");
+                break;
+            case 3:
+                strcpy(current->color, "Black");
+                break;
+            case 4:
+                strcpy(current->color, "Silver");
+                break;
+            case 5:
+                strcpy(current->color, "White");
+                break;
+            case 6:
+                strcpy(current->color, "Green");
+                break;
+            default:
+                printf("Invalid choice!\n");
+                return;
+            }
+            printf("Car color updated successfully!\n");
+            return;
+        }
+        current = current->next;
+    }
+    printf("Car not found!\n");
+}
 
 
 int main() {
@@ -401,7 +452,7 @@ int main() {
         printf("2. Sell a car from the showroom\n");
         printf("3. Reserve/Unreserve a car in the showroom\n");
         printf("4. View any car in the showroom\n");
-        printf("5. Your custom option\n");
+        printf("5. Change car color\n");
         printf("6. Exit the system\n");
         printf("Enter your choice: ");
 
@@ -433,8 +484,8 @@ int main() {
             viewCarsMenu(head);
             break;
         case 5:
-            printf("Your custom option...\n");
-           
+            printf("\nCustomize Car Color:\n");
+            customizeCarColor(head);
             break;
         case 6:
             printf("Exiting the system. Goodbye!\n");
