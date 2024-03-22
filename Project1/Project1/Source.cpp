@@ -437,6 +437,24 @@ void customizeCarColor(struct Car* head) {
     }
     printf("Car not found!\n");
 }
+void saveCarsToFile(struct Car* head) {
+    FILE* file = fopen("Car.dat", "w");
+    if (file != NULL) {
+        struct Car* current = head;
+        while (current != NULL) {
+            fprintf(file, "%s %s %s %s %d %d %d %.2f\n",
+                current->registration, current->make, current->model,
+                current->color, current->year, current->num_owners,
+                current->reserved, current->reserve_amount);
+            current = current->next;
+        }
+        fclose(file);
+        printf("Cars saved to car.dat.\n");
+    }
+    else {
+        printf("Error saving cars to car.dat.\n");
+    }
+}
 
 
 int main() {
@@ -445,6 +463,30 @@ int main() {
     // Initialize the head of the linked list
     struct Car* head = NULL;
 
+    // Open the file in read mode
+    FILE* file = fopen("Car.dat", "r");
+    if (file != NULL) {
+        // Read cars from the file
+        while (!feof(file)) {
+            struct Car* newCar = (struct Car*)malloc(sizeof(struct Car));
+            if (fscanf(file, "%9s %49s %49s %19s %d %d %d %f",
+                newCar->registration, newCar->make, newCar->model,
+                newCar->color, &newCar->year, &newCar->num_owners,
+                &newCar->reserved, &newCar->reserve_amount) == 8) {
+                newCar->next = head;
+                head = newCar;
+                numCars++;
+            }
+            else {
+                free(newCar);
+            }
+        }
+        fclose(file);
+        printf("Cars loaded from car.dat.\n");
+    }
+    else {
+        printf("car.dat not found. You'll need to input cars manually.\n");
+    }
     do {
         // Displaying the menu
         printf("Car Showroom Management System\n");
